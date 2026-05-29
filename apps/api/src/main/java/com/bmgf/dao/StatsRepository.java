@@ -1,12 +1,14 @@
 package com.bmgf.dao;
 
 import com.bmgf.po.Stats;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
-public interface StatsRepository extends MongoRepository<Stats, String> {
-    Optional<Stats> findByDate(String date);
-    Optional<Stats> findByUserIdAndDate(String userId, LocalDate date);
+public interface StatsRepository extends JpaRepository<Stats, String> {
+    // 站点级统计（无 userId）
+    Optional<Stats> findByUserIdIsNullAndDate(String date);
+
+    // 用户级统计
+    Optional<Stats> findByUserIdAndDate(String userId, String date);
 }

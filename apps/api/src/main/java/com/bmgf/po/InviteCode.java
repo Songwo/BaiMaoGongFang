@@ -1,21 +1,31 @@
 package com.bmgf.po;
 
-import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-@Data
-@Document(collection = "invite_codes")
+import java.util.UUID;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "invite_code")
 public class InviteCode {
     @Id
-    private String id;
-    private String code;           // 邀请码
-    private String inviter;        // 邀请人用户名
-    private String invitee;        // 被邀请人用户名
-    private LocalDateTime createdAt; // 创建时间
-    private boolean used;          // 是否已使用
-    private LocalDateTime usedAt;  // 使用时间
+    @Column(length = 36)
+    private String id = UUID.randomUUID().toString();
 
-    // getters and setters
+    @Column(name = "code")
+    private String code;           // 邀请码
+    @Column(name = "inviter")
+    private String inviter;        // 邀请人用户名
+    @Column(name = "invitee")
+    private String invitee;        // 被邀请人用户名
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    @Column(name = "used")
+    private boolean used;          // 是否已使用
+    @Column(name = "used_at")
+    private LocalDateTime usedAt;
 }

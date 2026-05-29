@@ -95,8 +95,6 @@ public class UserService {
         }
     }
     @Autowired
-    private MongoTemplate mongoTemplate;
-    @Autowired
     private PostRepository postRepository;
     @Autowired
     private CommentRepository commentRepository;
@@ -133,10 +131,7 @@ public class UserService {
             return false;
         }
 
-        HonoraryTitle foundTitle = mongoTemplate.findOne(
-                Query.query(Criteria.where("title").is(honoraryTitle)),
-                HonoraryTitle.class
-        );
+        HonoraryTitle foundTitle = honoraryTitleService.findByTitle(honoraryTitle);
         if (foundTitle == null) {
             return false;
         }
@@ -161,10 +156,7 @@ public class UserService {
         if (!StringUtils.hasText(honoraryTitle)) {
             return false;
         }
-        HonoraryTitle titleDoc = mongoTemplate.findOne(
-                Query.query(Criteria.where("title").is(honoraryTitle)),
-                HonoraryTitle.class
-        );
+        HonoraryTitle titleDoc = honoraryTitleService.findByTitle(honoraryTitle);
         if (titleDoc == null) {
             return false;
         }

@@ -1,7 +1,10 @@
 package com.bmgf.dao;
 
 import com.bmgf.po.HonoraryTitle;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface HonoraryTitleRepository extends MongoRepository<HonoraryTitle, String> {
+import java.util.Optional;
+
+public interface HonoraryTitleRepository extends JpaRepository<HonoraryTitle, String> {
+    Optional<HonoraryTitle> findByTitle(String title);
 }

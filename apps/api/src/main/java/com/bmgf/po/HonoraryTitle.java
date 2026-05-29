@@ -1,13 +1,24 @@
 package com.bmgf.po;
-import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-@Document(collection = "HonoraryTitle")
-@Data
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.UUID;
+
+@Entity
+@Table(name = "honorary_title")
+@Getter
+@Setter
 public class HonoraryTitle {
     @Id
-    private String id;
+    @Column(length = 36)
+    private String id = UUID.randomUUID().toString();
+
+    @Column(name = "title")
     private String title;
+    @Column(name = "description", columnDefinition = "text")
     private String description;
+    @Column(name = "activite")
     private int activite = 100;
 }

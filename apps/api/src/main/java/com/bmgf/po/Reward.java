@@ -1,11 +1,22 @@
 package com.bmgf.po;
-import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
-@Document(collection = "Reward")
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.UUID;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "reward")
 public class Reward {
-    private String id;
+    @Id
+    @Column(length = 36)
+    private String id = UUID.randomUUID().toString();
+
+    @Column(name = "name")
     private String name;
+    @Column(name = "context", columnDefinition = "text")
     private String context;
 }

@@ -19,4 +19,7 @@ public class HonoraryTitleService {
             return true;
         }
     }
+    public HonoraryTitle findByTitle(String title) {
+        return honoraryTitleRepository.findByTitle(title).orElse(null);
+    }
 }

@@ -1,22 +1,37 @@
 package com.bmgf.po;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.UUID;
 
-@Document(collection = "user_learning_behaviors")
+@Entity
+@Table(name = "user_learning_behavior")
 public class UserLearningBehavior {
     @Id
-    private String id;
+    @Column(length = 36)
+    private String id = UUID.randomUUID().toString();
+
+    @Column(name = "user_id")
     private String userId;
+    @Column(name = "content_type")
     private String contentType; // VIDEO, QUIZ, VULNERABILITY
+    @Column(name = "content_id")
     private String contentId;
+    @Column(name = "interaction_type")
     private String interactionType; // WATCH, ANSWER, SEARCH
+    @Column(name = "interaction_time")
     private LocalDateTime interactionTime;
+    @Column(name = "duration")
     private Integer duration; // 观看时长/答题用时
+    @Column(name = "score")
     private Double score; // 答题得分
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "metadata", columnDefinition = "jsonb")
     private Map<String, Object> metadata; // 额外信息
 
     public String getId() {
