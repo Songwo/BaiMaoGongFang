@@ -1,0 +1,53 @@
+spring:
+  data:
+    mongodb:
+      host: 127.0.0.1
+      database: CsNet
+      port: 27017
+      connection-pool-size: 50  # 配置 MongoDB 连接池大小
+      max-wait-time: 2000ms      # 设置最大等待时间（单位：毫秒）
+  web:
+    resources:
+      static-locations: ${STATIC_LOCATIONS:file:./uploads/avatars/} # 静态资源路径，外部化（原为机器本地绝对路径）
+  mvc:
+    async:
+      request-timeout: 300000
+    contentnegotiation:
+      favor-parameter: false  # 不支持查询参数的内容协商
+      favor-path-extension: false  # 不支持路径扩展名内容协商
+      media-types:
+        json: application/json  # 默认媒体类型为 JSON
+        multipart: multipart/form-data  # 支持 multipart 类型，用于文件上传
+
+server:
+  port: 8080  # 配置服务的端口
+
+docker:
+  host: ${DOCKER_HOST:tcp://localhost:2375}  # Docker 主机地址，外部化
+  tls:
+    enabled: true  # 启用 TLS
+    cert-path: /etc/docker/certs  # TLS 证书路径
+  pool:
+    max-total: 100  # 连接池的最大连接数
+    max-per-route: 20  # 每个路由的最大连接数
+    timeout:
+      connect: 30s  # 连接超时设置
+      response: 45s  # 响应超时设置
+logging:
+  charset: UTF-8  # 配置日志字符集为 UTF-8
+#docker:
+#  host: npipe:////./pipe/docker_engine
+#  host-ip: localhost
+#  tls:
+#    enabled: false
+#  pool:
+#    max-total: 100
+#    max-per-route: 20
+#    timeout:
+#      connect: 30s
+#      response: 45s
+#
+#logging:
+#  charset: UTF-8
+
+
