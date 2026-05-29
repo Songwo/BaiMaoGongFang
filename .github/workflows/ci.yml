@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  api:
+    name: 构建后端 (apps/api)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      # 测试当前仅占位且依赖外部服务，P8 建立测试体系后改为 verify 并去掉 -DskipTests
+      - name: 编译打包
+        working-directory: apps/api
+        run: ./mvnw -s ../../deploy/maven-settings.xml -B clean package -DskipTests
+
+  web:
+    name: 构建前端 (apps/web)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - name: 安装依赖并构建
+        working-directory: apps/web
+        run: |
+          npm ci
+          npm run build-only

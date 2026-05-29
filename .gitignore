@@ -1,0 +1,30 @@
+# ===== 环境变量与密钥（禁止入库）=====
+.env
+.env.*
+!.env.example
+*.p12
+*.pem
+*.key
+*.keystore
+
+# ===== 依赖与构建产物 =====
+node_modules/
+dist/
+target/
+build/
+
+# ===== IDE / 操作系统 =====
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.DS_Store
+Thumbs.db
+
+# ===== 日志 =====
+*.log
+logs/
+
+# ===== 工具工作目录 =====
+.spec-workflow/

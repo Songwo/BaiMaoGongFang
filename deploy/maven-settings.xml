@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  项目级 Maven 配置：将 central 镜像指向阿里云公共仓库（https）。
+  中央仓库在本环境被墙，需用此镜像。
+  用法：mvn -s deploy/maven-settings.xml <goal>
+  CI 中同样通过 -s 引用，保证可复现。
+-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <!-- 显式锁定本地仓库到当前用户目录，避免回退到全局配置中不存在的路径 -->
+  <localRepository>${user.home}/.m2/repository</localRepository>
+  <mirrors>
+    <mirror>
+      <id>aliyun-public</id>
+      <name>Aliyun Public Mirror</name>
+      <url>https://maven.aliyun.com/repository/public</url>
+      <mirrorOf>central</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>
