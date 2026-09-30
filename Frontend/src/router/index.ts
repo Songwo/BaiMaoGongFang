@@ -227,7 +227,7 @@ const routes: RouteRecordRaw[] = [  //使用RouteRecordRaw 类型
       },
       { path: 'questions', name: 'bmgfQuestions', component: () => import('@/components/home/Question.vue'), meta: { requiresAuth: true, requiresUser: true } },
       { path: 'my-sorts', name: 'bmgfMySorts', component: () => import('@/components/home/SortMine.vue'), meta: { requiresAuth: true, requiresUser: true } },
-      { path: 'rewards', name: 'bmgfRewards', component: () => import('@/components/home/Reward.vue'), meta: { requiresAuth: true, requiresUser: true } },
+      { path: 'rewards', name: 'bmgfRewards', component: () => import('@/components/home/reward.vue'), meta: { requiresAuth: true, requiresUser: true } },
       { 
         path: 'game', 
         name: 'bmgfGame', 

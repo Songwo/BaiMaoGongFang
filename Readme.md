@@ -32,6 +32,20 @@
 - **多端适配：** 支持 Web、小程序、安卓 App。
 - **后台管理：** 用户/内容/视频/漏洞管理。
 
+## Docker 一键部署（推荐）
+
+```bash
+git clone https://github.com/Songwo/BaiMaoGongFang.git
+cd BaiMaoGongFang
+cp .env.example .env   # 可选：填入 DEEPSEEK_API_KEY 以启用 AI 问答
+docker compose up -d --build
+```
+
+浏览器打开 http://localhost 即可。详细说明见 [docker/README.md](docker/README.md)。
+
+> ⚠️ 安全提示：`BackendFlask/.env` 曾包含真实密钥并已提交到仓库，请务必轮换
+> DeepSeek API Key、JWT_SECRET 和 MongoDB 密码，不要再把真实密钥提交到公开仓库。
+
 ## 快速启动
 
 ### 1. 前端（Vue3）

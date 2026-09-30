@@ -1,0 +1,22 @@
+# 白帽工坊 Flask 后端（AI 问答）
+FROM python:3.11-slim
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
+# gunicorn 用于生产服务（requirements.txt 里没有，单独装）
+RUN pip install gunicorn==23.0.0
+
+COPY BackendFlask/requirements.txt ./
+RUN pip install -r requirements.txt
+
+COPY BackendFlask/app.py BackendFlask/config.py BackendFlask/extensions.py ./
+COPY BackendFlask/routes ./routes
+COPY BackendFlask/clients ./clients
+COPY BackendFlask/utils ./utils
+
+EXPOSE 5000
+# 配置全部走环境变量（见 docker-compose.yml / .env），不要把 .env 打进镜像
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--timeout", "120", "app:app"]

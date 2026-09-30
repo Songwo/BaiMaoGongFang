@@ -1,0 +1,17 @@
+# 白帽工坊 SpringBoot 后端（主 API / CTF / 用户）
+# ---------- 构建阶段 ----------
+FROM maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY BackendSpringBoot/pom.xml ./
+COPY BackendSpringBoot/src ./src
+RUN mvn -B -DskipTests package \
+ && cp target/*.jar /app/app.jar
+
+# ---------- 运行阶段 ----------
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+COPY --from=build /app/app.jar ./app.jar
+RUN mkdir -p /data/avatar
+EXPOSE 8080
+# 数据库/静态资源路径等全部由 docker-compose.yml 的 environment 覆盖
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

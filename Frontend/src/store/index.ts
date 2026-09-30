@@ -1,4 +1,4 @@
-import { createStore } from 'f:/NetGame_s/hello_vue3/node_modules/vuex';
+import { createStore } from 'vuex';
 
 // 定义角色类型
 type UserRole = 'ROLE_ADMIN' | 'ROLE_USER' | 'ROLE_VIP';

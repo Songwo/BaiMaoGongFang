@@ -1,0 +1,22 @@
+# Docker 构建上下文瘦身：一键部署只需要 Web 三件套，
+# 安卓 App / 微信小程序 / 申报文档不打进镜像
+VideoApp/
+White Hat Workshop/
+*.pdf
+*.docx
+*.mp4
+*.apk*
+
+.git/
+.gitignore
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+
+Frontend/node_modules/
+Frontend/dist/
+BackendFlask/__pycache__/
+BackendFlask/.env
+BackendFlask/.idea/
+BackendSpringBoot/target/

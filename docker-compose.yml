@@ -1,0 +1,87 @@
+# 白帽工坊 Docker 一键部署
+# 用法：cp .env.example .env（按需填写） && docker compose up -d --build
+# 之后浏览器打开 http://localhost 即可
+
+name: baimaogongfang
+
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    # 只在 compose 内网提供服务，不映射到宿主机
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+
+  # SpringBoot 主后端：主 API / CTF / 用户 / 论坛
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_MONGODB_HOST: mongo
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: csnet
+      # 覆盖 application.yml 里写死的 Windows 路径（F:/NetGame_s/...）
+      SPRING_WEB_RESOURCES_STATIC_LOCATIONS: file:/data/avatar/
+      # CTF 动态靶场需要访问 Docker；不用 CTF 功能可删掉下面两行
+      DOCKER_HOST: unix:///var/run/docker.sock
+    volumes:
+      - avatar-data:/data/avatar
+      - /var/run/docker.sock:/var/run/docker.sock # CTF 动态靶场需要；不用可删除
+    depends_on:
+      - mongo
+      - redis
+
+  # Flask 后端：AI 问答
+  flask:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.flask
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_HOST: 0.0.0.0
+      FLASK_PORT: 5000
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      MONGODB_URI: mongodb://mongo:27017/csnet
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      DEEPSEEK_API_URL: ${DEEPSEEK_API_URL:-https://api.deepseek.com}
+      JWT_SECRET: ${JWT_SECRET:-please-change-me-in-production}
+      ALLOWED_ORIGINS: "*"
+    depends_on:
+      - mongo
+      - redis
+
+  # Vue3 前端：构建时把后端地址 baked 进去（本地一键部署默认 localhost）
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8080}
+        VITE_AI_URL: ${VITE_AI_URL:-http://localhost:5000/api/chat}
+        VITE_AI_STA_URL: ${VITE_AI_STA_URL:-http://localhost:5000/api/chat/instance}
+        VITE_AI_STAD_URL: ${VITE_AI_STAD_URL:-http://localhost:5000/api/chat/instance}
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - flask
+
+volumes:
+  mongo-data:
+  redis-data:
+  avatar-data:
